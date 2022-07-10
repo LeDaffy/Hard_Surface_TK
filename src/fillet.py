@@ -12,7 +12,7 @@ class mesh_fillet(bpy.types.Operator):
     width: bpy.props.FloatProperty(name="Width", default=0.0, min=0.0)
     loop_slide_0: bpy.props.BoolProperty(name="Loop Slide 1", default=False)
     loop_slide_1: bpy.props.BoolProperty(name="Loop Slide 2", default=False)
-    flip_0: bpy.props.BoolProperty(name="Flip 1", default=False)
+    flip_0: bpy.props.BoolProperty(name="Flip 1", default=True)
     flip_1: bpy.props.BoolProperty(name="Flip 2", default=False)
 
     @classmethod
@@ -42,7 +42,7 @@ class mesh_fillet(bpy.types.Operator):
         # create selection group
         bm_faces_offset_0 = [f for f in bm.faces if f.select]
         # outset
-        bm_faces_gen_0 = bmesh.ops.inset_region(bm, \
+        bm_face_gen_0 = bmesh.ops.inset_region(bm, \
                 faces=bm_faces_offset_0, \
                 use_boundary=False,\
                 use_even_offset=True,\
@@ -53,7 +53,10 @@ class mesh_fillet(bpy.types.Operator):
                 depth=0.0,\
                 use_outset=self.flip_0)
         bpy.ops.mesh.select_all(action='DESELECT')
-        bm_faces_gen_1 = bmesh.ops.inset_region(bm, \
+        # select original loop and repeat
+        for e in bm_edge_original_selection:
+            e.select = True
+        bm_face_gen_1 = bmesh.ops.inset_region(bm, \
                 faces=bm_faces_offset_0, \
                 use_boundary=False,\
                 use_even_offset=True,\
@@ -65,10 +68,34 @@ class mesh_fillet(bpy.types.Operator):
                 use_outset=self.flip_1)
         bpy.ops.mesh.select_all(action='DESELECT')
 
+        for f in bm_face_gen_0['faces']:
+            f.select = True
+        for f in bm_face_gen_1['faces']:
+            f.select = True
+
+        bm_faces_bounds = bm_face_gen_0['faces'] + bm_face_gen_1['faces']
+
+        bm.select_flush(True)
+        bm_gen_verts = [v for v in bm.verts if v.select]
+        bpy.ops.mesh.select_all(action='DESELECT')
+        for v in bm_gen_verts:
+            result, coor, normal, index = bpy.data.objects[object_names[0]].closest_point_on_mesh(v.co)
+            v.co = coor
+        bpy.ops.mesh.select_all(action='DESELECT')
+
+        for f in bm_faces_bounds:
+            f.select = True
+
+        bpy.ops.mesh.select_mode(type='FACE')
+        bpy.ops.mesh.select_all(action='INVERT')
+
+        bm_faces_to_delete = [f for f in bm.faces if f.select]
+        # bmesh.ops.delete(bm, geom=bm_faces_to_delete, context='FACES')
+        # bmesh.ops.solidify(bm, geom=bm_faces_bounds, thickness=.1)
 
 
 
-
+       
 
 
 
