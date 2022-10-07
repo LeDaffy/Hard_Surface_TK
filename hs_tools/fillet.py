@@ -10,6 +10,7 @@ class mesh_fillet(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     width: bpy.props.FloatProperty(name="Width", default=0.1, min=0.0)
+    prox: bpy.props.FloatProperty(name="Proximity", default=0.1, min=0.0)
     solidify: bpy.props.FloatProperty(name="Solidify", default=0.1, min=0.0)
     loop_slide_0: bpy.props.BoolProperty(name="Loop Slide 1", default=False)
     loop_slide_1: bpy.props.BoolProperty(name="Loop Slide 2", default=False)
@@ -136,7 +137,7 @@ class mesh_fillet(bpy.types.Operator):
         bpy.ops.mesh.duplicate()
         fillet_object = [f for f in bm.faces if f.select]
         fillet_object_verts = [f for f in bm.verts if f.select]
-        bmesh.ops.translate(bm, verts=fillet_object_verts, vec=(2, 2, 2))
+        bmesh.ops.translate(bm, verts=fillet_object_verts, vec=(2000, 2000, 2000))
         bpy.ops.mesh.select_all(action='DESELECT')
         for f in fillet_object:
             f.hide_set(True)
@@ -196,10 +197,47 @@ class mesh_fillet(bpy.types.Operator):
         bm.select_flush(True)
         bmesh.update_edit_mesh(context.active_object.data, loop_triangles=True, destructive=True)
 
+        
+        fillet_piece = [v for v in bm.verts if v.select]
+        fillet_inner = []
+        bpy.ops.mesh.select_all(action='DESELECT')
+        for v in fillet_piece:
+            if len(v.link_edges) > 3:
+                v.select=True
+                fillet_inner.append(v)
+        
+        bmesh.ops.translate(bm, verts=fillet_piece, vec=(-2000, -2000, -2000))
 
+        bpy.ops.mesh.select_all(action='DESELECT')
+        bpy.ops.mesh.select_mode(type='VERT')
+        bpy.ops.mesh.select_all(action='SELECT')
+
+
+        for v in fillet_piece:
+            v.select=False
+
+        bpy.ops.mesh.select_all(action='DESELECT')
+        bpy.ops.mesh.select_mode(type='VERT')
+        temp = []
+        for v in bm.verts:
+            if v not in fillet_piece:
+                temp.append(v)
+        for v in temp:
+            for c in fillet_inner:
+                if (v.co - c.co).length < self.prox:
+                    v.select=True
+
+        bpy.ops.mesh.select_linked(delimit=set())
+
+        bpy.ops.mesh.delete(type='FACE')
         # cleanup
+        # update bmesh
+        bm.select_flush(True)
+        bmesh.update_edit_mesh(context.active_object.data, loop_triangles=True, destructive=True)
         bpy.data.objects.remove(bpy.data.objects[object_names[0]])
         bm.free()
+
+        
         return {'FINISHED'}
 
 
