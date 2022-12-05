@@ -59,6 +59,7 @@ class make_manifold(bpy.types.Operator):
         side_2_verts = [v for v in selected_verts if v.select == False]
         side_2_edges = [e for e in selected_edges if e.select == False]
 
+        # split into two sides
         vg_names = ["hstk_side_1_verts", "hstk_side_2_verts"]
         bpy.ops.mesh.select_all(action='DESELECT')
         for v in side_1_verts:
@@ -73,6 +74,8 @@ class make_manifold(bpy.types.Operator):
         context.active_object.vertex_groups[-1].name = vg_names[1]
         context.active_object.vertex_groups.active_index = context.active_object.vertex_groups[vg_names[1]].index
         #bpy.ops.object.vertex_group_select()
+
+        #each side has a vertex group
         dissolve_group = []
         bpy.ops.mesh.select_all(action='DESELECT')
         for v2 in side_2_verts:
