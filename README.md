@@ -7,17 +7,5 @@ Examples fillets creating using default tools vs the tools in this repository ar
 Default Tools Result       |  Custom Tools Result      |  Fillet Applied To Result
 :-------------------------:|:-------------------------:|:-------------------------:
 ![](./images/two_cylinders/default.png)  |  ![](./images/two_cylinders/fillet.png) | ![](./images/two_cylinders/smoothed.png)
+![](./images/cube_sphere_diff/default.png)  |  ![](./images/cube_sphere_diff/fillet.png) | ![](./images/cube_sphere_diff/smoothed.png)
 
-Default:
-
-![default](./images/two_cylinders/default.png)
-
-
-Custom Tool Result:
-
-![default](./images/two_cylinders/fillet.png)
-
-
-Fillet applied to custom tool result:
-
-![default](./images/two_cylinders/smoothed.png)
