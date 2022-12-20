@@ -8,4 +8,5 @@ Default Tools Result       |  Custom Tools Result      |  Fillet Applied To Resu
 :-------------------------:|:-------------------------:|:-------------------------:
 ![](./images/two_cylinders/default.png)  |  ![](./images/two_cylinders/fillet.png) | ![](./images/two_cylinders/smoothed.png)
 ![](./images/cube_sphere_diff/default.png)  |  ![](./images/cube_sphere_diff/fillet.png) | ![](./images/cube_sphere_diff/smoothed.png)
+![](./images/cube_sphere_union/default.png)  |  ![](./images/cube_sphere_union/fillet.png) | ![](./images/cube_sphere_union/smoothed.png)
 
