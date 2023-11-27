@@ -12,3 +12,7 @@ Default Tools Result       |  Custom Tools Result      |  Fillet Applied To Resu
 ![](./images/cube_sphere_diff/default.png)  |  ![](./images/cube_sphere_diff/fillet.png) | ![](./images/cube_sphere_diff/smoothed.png)
 ![](./images/cube_sphere_union/default.png)  |  ![](./images/cube_sphere_union/fillet.png) | ![](./images/cube_sphere_union/smoothed.png)
 
+# Videos
+[https://www.youtube.com/watch?v=qcoza2Cz_sA](https://www.youtube.com/watch?v=qcoza2Cz_sA)
+[https://www.youtube.com/watch?v=nNiw54PxFSA](https://www.youtube.com/watch?v=nNiw54PxFSA)
+[https://www.youtube.com/watch?v=0bOFw6RQARQ](https://www.youtube.com/watch?v=0bOFw6RQARQ)
